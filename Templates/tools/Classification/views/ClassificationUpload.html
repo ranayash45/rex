@@ -1,0 +1,75 @@
+{% extends "tools/Classification/views/Base.html" %}
+{% block content %}
+<h2>Available Classifiers</h2>
+<div class="container">
+
+
+    <h2>Mango Upload Method</h2>
+    {% if uploaded_file_url %}
+        <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+        <div class="row">
+        <div class="col-lg-6 col-md-6 col-xs-12">
+            <img class="img-thumbnail" src="{{ uploaded_file_url }}" />
+        </div>
+        <div class="col-lg-6 col-md-6 col-xs-12">
+            <h4>Results</h4>
+            <table class="table table-condensed">
+                <tr>
+                    <Th>Name</Th>
+                    <th>Score</th>
+                    <th>Result</th>
+                </tr>
+                <Tr>
+                    <th>SVM</th>
+                    <td>{{ svm }}</td>
+                    <td>{{ svml.0 }}</td>
+                </Tr>
+
+                <Tr>
+                    <th>Decision Tree</th>
+                    <td>{{ des }}</td>
+                    <td>{{ desl.0 }}</td>
+                </Tr>
+
+                <Tr>
+                    <th>Perceptron</th>
+                    <td>{{ pes }}</td>
+                    <td>{{ pesl.0 }}</td>
+                </Tr>
+            </table>
+            <h4>Statstics</h4>
+            <table class="table table-condensed">
+                <tr>
+                    <th>Channel A Average</th>
+                    <Td>{{ channela }}</Td>
+                </tr>
+                <tr>
+                    <th>Channel B Average</th>
+                    <td>{{ channelb }}</td>
+                </tr>
+                <tr>
+                    <th>ChainCode </th>
+                    <td>{{ chaincode }}</td>
+                </tr>
+            </table>
+        </div>
+        </div>
+    {% endif %}
+
+    {% if error_message %}
+        <div class="alert alert-danger">{{ error_message }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Mango Image</label>
+            <input type="file" name="classificationupload" />
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Upload" />
+        </div>
+    </form>
+</div>
+
+{% endblock %}

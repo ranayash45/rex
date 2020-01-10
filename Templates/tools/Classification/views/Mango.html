@@ -1,0 +1,52 @@
+{% extends "tools/Classification/views/Base.html" %}
+{% block content %}
+<h2>Mango Classification</h2>
+<p>Mango classifier is used to predict whether mango is ripe, unripe or partially ripe. this is experimental project so dont expect same result everytime.
+judge the output on real life human prediction.</p>
+<div class="container">
+    <div id="screenshot">
+        <video autoplay style="display:none;"></video>
+        <img src="">
+        <canvas style="display:none;"></canvas>
+        <div class="row">
+            <div class="col-lg-12">
+            <button class="btn btn-default capture-button">Capture</button>
+            <button class="btn btn-default" id="screenshot-button">SnapShot</button>
+            </div>
+        </div>
+    </div>
+<script>
+const constraints = {
+  video: true
+};
+const captureVideoButton = document.querySelector('#screenshot .capture-button');
+const screenshotButton = document.querySelector('#screenshot-button');
+const img = document.querySelector('#screenshot img');
+const video = document.querySelector('#screenshot video');
+
+const canvas = document.createElement('canvas');
+
+captureVideoButton.onclick = function() {
+  navigator.mediaDevices.getUserMedia(constraints).
+    then(handleSuccess).catch(handleError);
+};
+
+screenshotButton.onclick = video.onclick = function() {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  // Other browsers will fall back to image/png
+  img.src = canvas.toDataURL('image/webp');
+};
+
+function handlerError(stream){
+    console.log(stream);
+}
+
+function handleSuccess(stream) {
+  screenshotButton.disabled = false;
+  video.srcObject = stream;
+}
+</script>
+</div>
+{% endblock %}
