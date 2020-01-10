@@ -31,15 +31,16 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'tools',
-    'tools.DateTime',
-    'tools.Classification',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tools',
+    'tools.DateTime',
+    'tools.Classification',
+    'tools.Classification.Learning'
 ]
 
 MIDDLEWARE = [
