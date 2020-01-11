@@ -37,6 +37,37 @@
                     <td>{{ pesl.0 }}</td>
                 </Tr>
             </table>
+           <h4>Breed Type</h4>
+             <table class="table table-condensed">
+                <tr>
+                    <Th>Name</Th>
+                    <th>Score</th>
+                    <th>Result</th>
+                </tr>
+                <Tr>
+                    <th>SVM</th>
+                    <td>{{ tsvm }}</td>
+                    <td>{{ tsvml.0 }}</td>
+                </Tr>
+
+                <Tr>
+                    <th>Decision Tree</th>
+                    <td>{{ tdes }}</td>
+                    <td>{{ tdesl.0 }}</td>
+                </Tr>
+
+                <Tr>
+                    <th>Perceptron</th>
+                    <td>{{ tpes }}</td>
+                    <td>{{ tpesl.0 }}</td>
+                </Tr>
+            </table>
+
+
+        </div>
+        </div>
+    <div class="row">
+        <div class="col-lg-12">
             <h4>Statstics</h4>
             <table class="table table-condensed">
                 <tr>
@@ -53,7 +84,7 @@
                 </tr>
             </table>
         </div>
-        </div>
+    </div>
     {% endif %}
 
     {% if error_message %}

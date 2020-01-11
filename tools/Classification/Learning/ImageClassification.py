@@ -197,4 +197,117 @@ def IdentifyMango(imgnp):
     
     img = cv2.resize(img,(512,512))
     Result['img'] = img
+
+    dataframe = pandas.read_csv(staticfiles_storage.path('QualityFeaturesMango.csv'))
+
+
+    data = dataframe.values
+
+    Y = data[:, 0]
+    X = data[:, 2:]
+    from sklearn.preprocessing import LabelEncoder
+    labelencoder = LabelEncoder()
+    Y = labelencoder.fit_transform(Y)
+
+    # Y[Y!=0] = 1
+    # print(Y)
+
+    from sklearn.model_selection import train_test_split
+
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.6, random_state=1)
+
+    from sklearn.preprocessing import StandardScaler, LabelEncoder
+
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    from sklearn.svm import SVC
+
+    classifier = SVC(gamma='scale', kernel='rbf', decision_function_shape='ovo')
+    # classifier = SVC(kernel='linear', random_state=0, decision_function_shape='ovo')
+    classifier.fit(X_train, y_train)
+
+    decision_tree = DecisionTreeClassifier()
+    decision_tree.fit(X_train, y_train)
+
+    perceptron_classifier = MLPClassifier()
+    perceptron_classifier.fit(X_train, y_train)
+
+    from sklearn.metrics import confusion_matrix
+
+    y_pred = classifier.predict(X_test)
+    svm_cm = confusion_matrix(y_test, y_pred)
+    score = classifier.score(X_test, y_test)
+
+    y_pred = decision_tree.predict(X_test)
+    decision_tree_cm = confusion_matrix(y_test, y_pred)
+    score2 = decision_tree.score(X_test, y_test)
+
+    y_pred = perceptron_classifier.predict(X_test)
+    perceptron_cm = confusion_matrix(y_test, y_pred)
+    score3 = perceptron_classifier.score(X_test, y_test)
+    print("Score of SVM For ripe and unripe : ", score)
+    print("Score of Decision Tree For ripe and unripe : ", score2)
+    print("Score of Percenptron Classifier for ripe and unripe : ", score3)
+    Result['tsvm'] = score
+    Result['tdes'] = score2
+    Result['tpes'] = score3
+    from matplotlib.colors import ListedColormap
+
+    # X_set, y_set = X_train, y_train
+    # X1, X2 = np.meshgrid(np.arange(start=X_set[:, 0].min() - 1, stop=X_set[:, 0].max() + 1, step=0.01),
+    #                      np.arange(start=X_set[:, 1].min() - 1, stop=X_set[:, 1].max() + 1, step=0.01))
+    # plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+    #              alpha=0.75, cmap=ListedColormap(('red', 'green')))
+    # plt.xlim(X1.min(), X1.max())
+    # plt.ylim(X2.min(), X2.max())
+    # for i, j in enumerate(np.unique(y_set)):
+    #     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+    #                 c=ListedColormap(('red', 'green'))(i), label=j)
+    # plt.title('SVM (Training set)')
+    # plt.xlabel('Age')
+    # plt.ylabel('Estimated Salary')
+    # plt.legend()
+    # plt.show()
+    #
+    # # Visualising the Test set results
+    # from matplotlib.colors import ListedColormap
+    #
+    # X_set, y_set = X_test, y_test
+    # X1, X2 = np.meshgrid(np.arange(start=X_set[:, 0].min() - 1, stop=X_set[:, 0].max() + 1, step=0.01),
+    #                      np.arange(start=X_set[:, 1].min() - 1, stop=X_set[:, 1].max() + 1, step=0.01))
+    # plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+    #              alpha=0.75, cmap=ListedColormap(('red', 'green')))
+    # plt.xlim(X1.min(), X1.max())
+    # plt.ylim(X2.min(), X2.max())
+    # for i, j in enumerate(np.unique(y_set)):
+    #     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+    #                 c=ListedColormap(('red', 'green'))(i), label=j)
+    # plt.title('SVM (Test set)')
+    # plt.xlabel('Age')
+    # plt.ylabel('Estimated Salary')
+    # plt.legend()
+    # plt.show()
+
+    features = [red, green, blue]
+    features.extend(haralick(orignal).mean(0))
+    features = np.asarray(features).reshape(1, -1)
+    features = sc.transform(features)
+
+    svm_val = classifier.predict(features)
+    decision_tree_val = decision_tree.predict(features)
+    preceptron_val = perceptron_classifier.predict(features)
+
+    # print("SVM classfied Mango as : ",labelencoder.inverse_transform(svm_val))
+    # print("Decision classfied Mango as : ",labelencoder.inverse_transform(decision_tree_val))
+    # print("Perceptron classfied Mango as : ",labelencoder.inverse_transform(preceptron_val))
+    Result['tsvmp'] = svm_val
+    Result['tdesp'] = decision_tree_val
+    Result['tpesp'] = preceptron_val
+    Result['tsvml'] = labelencoder.inverse_transform(svm_val)
+    Result['tdesl'] = labelencoder.inverse_transform(decision_tree_val)
+    Result['tpesl'] = labelencoder.inverse_transform(preceptron_val)
+
+
     return Result
