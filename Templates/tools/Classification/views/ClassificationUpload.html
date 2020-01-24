@@ -12,28 +12,47 @@
             <img class="img-thumbnail" src="{{ uploaded_file_url }}" />
         </div>
         <div class="col-lg-6 col-md-6 col-xs-12">
+            <h4>Score For Learning By Different Techniques</h4>
+            <table class="table table-condensed">
+                <tr>
+                    <td></td>
+                    <th>Score for Breed Type</th>
+                    <th>Score for Condition</th>
+                </tr>
+                <tr>
+                    <td>SVM</td>
+                    <td>{{ svm }}</td>
+                    <td>{{ tsvm }}</td>
+                </tr>
+                <tr>
+                    <td>Decision Tree</td>
+                    <td>{{ des }}</td>
+                    <td>{{ tdes }}</td>
+                </tr>
+                <tr>
+                    <td>Perceptron</td>
+                    <td>{{ pes }}</td>
+                    <td>{{ tpes }}</td>
+                </tr>
+            </table>
             <h4>Results</h4>
             <table class="table table-condensed">
                 <tr>
                     <Th>Name</Th>
-                    <th>Score</th>
                     <th>Result</th>
                 </tr>
                 <Tr>
                     <th>SVM</th>
-                    <td>{{ svm }}</td>
                     <td>{{ svml.0 }}</td>
                 </Tr>
 
                 <Tr>
                     <th>Decision Tree</th>
-                    <td>{{ des }}</td>
                     <td>{{ desl.0 }}</td>
                 </Tr>
 
                 <Tr>
                     <th>Perceptron</th>
-                    <td>{{ pes }}</td>
                     <td>{{ pesl.0 }}</td>
                 </Tr>
             </table>
@@ -42,23 +61,19 @@
                 <tr>
                     <Th>Name</Th>
                     <th>Score</th>
-                    <th>Result</th>
                 </tr>
                 <Tr>
                     <th>SVM</th>
-                    <td>{{ tsvm }}</td>
                     <td>{{ tsvml.0 }}</td>
                 </Tr>
 
                 <Tr>
                     <th>Decision Tree</th>
-                    <td>{{ tdes }}</td>
                     <td>{{ tdesl.0 }}</td>
                 </Tr>
 
                 <Tr>
                     <th>Perceptron</th>
-                    <td>{{ tpes }}</td>
                     <td>{{ tpesl.0 }}</td>
                 </Tr>
             </table>
