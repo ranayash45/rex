@@ -1,1 +1,1 @@
-web: gunicorn rextools.wsgi --preload
+web: gunicorn rextools:app --preload
