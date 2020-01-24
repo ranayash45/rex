@@ -8,3 +8,4 @@ mahotas
 numpy
 pandas
 matplotlib
+gunicorn
