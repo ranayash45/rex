@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -129,8 +129,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 
-#STATIC_ROOT = "/var/www/static"
-#MEDIA_ROOT = "/var/www/media"
+# STATIC_ROOT = "/var/www/static"
+# MEDIA_ROOT = "/var/www/media"
 # STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #
@@ -141,7 +141,7 @@ USE_TZ = True
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, 'Resource'),
 # )
-#
+
 USE_S3 = os.getenv('USE_S3') == 'TRUE'
 
 if USE_S3:
@@ -162,5 +162,5 @@ else:
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
-MEDIA_URL = '/mediafiles/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+# MEDIA_URL = '/mediafiles/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
