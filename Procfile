@@ -1,1 +1,1 @@
-web: gunicorn rex:app --preload
+web: gunicorn rex.wsgi --preload
