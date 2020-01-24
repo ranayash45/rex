@@ -1,5 +1,5 @@
-build: ./app
-  command: gunicorn rex.wsgi
+build: ./rex
+  command: gunicorn rex.wsgi:application
   expose:
     - 8000
   environment:
