@@ -1,7 +1,5 @@
 build: ./rex
   command: gunicorn rex.wsgi:application
-  expose:
-    - 8000
   environment:
     - SECRET_KEY=please_change_me
     - SQL_ENGINE=django.db.backends.postgresql
@@ -12,8 +10,6 @@ build: ./rex
     - SQL_PORT=5432
     - DATABASE=postgres
     - USE_S3=TRUE
-    - AWS_ACCESS_KEY_ID=UPDATE_ME
-    - AWS_SECRET_ACCESS_KEY=UPDATE_ME
-    - AWS_STORAGE_BUCKET_NAME=UPDATE_ME
-  depends_on:
-    - db
+    - AWS_ACCESS_KEY_ID=AKIAINO2E2WAHUYRTL4Q
+    - AWS_SECRET_ACCESS_KEY=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
+    - AWS_STORAGE_BUCKET_NAME=myrexbucket
