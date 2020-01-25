@@ -1,5 +1,5 @@
 build: ./rex
-  command: gunicorn rex.wsgi:application
+  web: gunicorn rex.wsgi
   environment:
     - SECRET_KEY=please_change_me
     - SQL_ENGINE=django.db.backends.postgresql
