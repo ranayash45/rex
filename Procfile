@@ -1,1 +1,1 @@
-web: gunicorn rex.wsgi
+web: gunicorn rex:app
