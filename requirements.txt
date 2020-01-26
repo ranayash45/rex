@@ -11,3 +11,4 @@ matplotlib
 gunicorn
 whitenoise
 django-storages
+boto
