@@ -7,6 +7,9 @@ import mahotas
 from mahotas.features import haralick
 import numpy
 from django.contrib.staticfiles.storage import staticfiles_storage
+import boto3
+from rex.settings import AWS_SECRET_ACCESS_KEY,AWS_STORAGE_BUCKET_NAME,AWS_ACCESS_KEY_ID
+import io
 
 def IdentifyMango(imgnp):
     Result = {}
@@ -52,23 +55,26 @@ def IdentifyMango(imgnp):
     Result['channela'] = channel_a_mean
     Result['channelb'] = channel_b_mean
     Result['chaincode'] = chaincode
-    
+
 
 
     import pandas
     import numpy as np
     import matplotlib.pyplot as plt
-
-    dataframe = pandas.read_csv(staticfiles_storage.path('QualityFeatures.csv'))
-
+    s3 = boto3.client('s3',
+                      aws_access_key_id=AWS_ACCESS_KEY_ID,
+                      aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+    key = 'static/QualityFeatures.csv'
+    obj = s3.get_object(Bucket=AWS_STORAGE_BUCKET_NAME,Key=key)
+    dataframe = pandas.read_csv(io.BytesIO(obj['Body'].read()),encoding='utf-8')
     dataframe = dataframe.sort_values(by='Partially Ripe')
     ripe = dataframe.loc[dataframe['Partially Ripe'] == 'Ripe']
     unripe = dataframe.loc[dataframe['Partially Ripe'] == 'Unripe']
     partially_ripe = dataframe.loc[dataframe['Partially Ripe'] == 'Partially Ripe']
     ripe = ripe.iloc[:110,:].values
-    unripe = unripe.iloc[:110,:].values 
+    unripe = unripe.iloc[:110,:].values
     partially_ripe = partially_ripe.iloc[:110,:].values
-    
+
     data = []
     for i in range(ripe.shape[0]):
         data.append(ripe[i,:].tolist())
@@ -76,10 +82,10 @@ def IdentifyMango(imgnp):
         data.append(unripe[i,:].tolist())
     for i in range(partially_ripe.shape[0]):
         data.append(partially_ripe[i,:].tolist())
-    
+
     data = np.asarray(data)
-    
-    
+
+
     Y = data[:, 0]
     X = data[:, 2:]
     from sklearn.preprocessing import LabelEncoder
@@ -119,7 +125,7 @@ def IdentifyMango(imgnp):
     y_pred = classifier.predict(X_test)
     svm_cm = confusion_matrix(y_test, y_pred)
     score = classifier.score(X_test, y_test)
-    
+
     y_pred = decision_tree.predict(X_test)
     decision_tree_cm = confusion_matrix(y_test, y_pred)
     score2 = decision_tree.score(X_test,y_test)
@@ -169,17 +175,17 @@ def IdentifyMango(imgnp):
     # plt.ylabel('Estimated Salary')
     # plt.legend()
     # plt.show()
-    
-    
-    
+
+
+
     features = [red,green,blue]
     features.extend(haralick(orignal).mean(0))
     features = np.asarray(features).reshape(1,-1)
     features = sc.transform(features)
-    
-    
-    
-    
+
+
+
+
     svm_val = classifier.predict(features)
     decision_tree_val = decision_tree.predict(features)
     preceptron_val =perceptron_classifier.predict(features)
@@ -194,11 +200,14 @@ def IdentifyMango(imgnp):
     Result['svml'] = labelencoder.inverse_transform(svm_val)
     Result['desl'] = labelencoder.inverse_transform(decision_tree_val)
     Result['pesl'] = labelencoder.inverse_transform(preceptron_val)
-    
+
     img = cv2.resize(img,(512,512))
     Result['img'] = img
 
-    dataframe = pandas.read_csv(staticfiles_storage.path('QualityFeaturesMango.csv'))
+
+    key = 'static/QualityFeaturesMango.csv'
+    obj = s3.get_object(Bucket=AWS_STORAGE_BUCKET_NAME,Key=key)
+    dataframe = pandas.read_csv(io.BytesIO(obj['Body'].read()),encoding='utf-8')
 
 
     data = dataframe.values

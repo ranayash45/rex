@@ -143,15 +143,28 @@ USE_TZ = True
 #     os.path.join(BASE_DIR, 'Resource'),
 # )
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET')
+#AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+#AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+#AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET')
 
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+AWS_ACCESS_KEY_ID = 'AKIASUMCIJFD5PZUJCF5'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'myrexbucket'
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
-STATIC_URL = 'http://' + AWS_STORAGE_BUCKET_NAME + '.s3.amazonaws.com/'
+STATIC_LOCATION = 'static'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+STATICFILES_STORAGE = 'rex.storage_backends.StaticStorage'
+# s3 public media settings
+PUBLIC_MEDIA_LOCATION = 'media'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+DEFAULT_FILE_STORAGE = 'rex.storage_backends.PublicMediaStorage'
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'Resource'),)
+
 
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 #

@@ -1,5 +1,7 @@
+from django.core.files.base import ContentFile
 from django.shortcuts import render
-from django.core.files.storage import FileSystemStorage
+from rex.settings import MEDIA_URL
+from tools.models import Upload
 from .Learning.ImageClassification import IdentifyMango
 import cv2
 import numpy as np
@@ -15,17 +17,17 @@ def ListClassifiers(request):
 def ClassificationUploadMethod(request):
     if request.method == 'POST' and request.FILES['classificationupload']:
         myfile = request.FILES['classificationupload']
-        fs = FileSystemStorage()
         if myfile.name.lower().endswith('.jpeg') or myfile.name.lower().endswith('.jpg'):
-            fs.delete('test.jpeg')
-            filename = fs.save('test.jpeg', myfile)
-            img_np = cv2.imread(fs.path(filename))
+            #print(myfile)
+            filedata = myfile.read()
+            img_np = cv2.imdecode(np.asarray(bytearray(filedata),dtype=np.uint8),-1)
+            #img_np = cv2.imread(MEDIA_URL +'/'+filename)
             Result = IdentifyMango(img_np)
-            print(Result)
-            cv2.imwrite(fs.path(filename),Result['img'])
-
-            uploaded_file_url = fs.url(filename)
-            Result['uploaded_file_url'] = uploaded_file_url
+            image_string = cv2.imencode('.jpg',Result['img'])
+            upload = Upload()
+            upload.file.save(myfile.name,ContentFile(image_string[1]))
+            upload.save()
+            Result['uploaded_file_url'] = MEDIA_URL + upload.file.name
             return render(request, 'tools/Classification/views/ClassificationUpload.html',Result)
         else:
             return render(request, 'tools/Classification/views/ClassificationUpload.html', {
