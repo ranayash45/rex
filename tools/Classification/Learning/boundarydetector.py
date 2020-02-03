@@ -46,7 +46,7 @@ class ShapeDetector(object):
             angle = (angle + 360) % 360
             value = math.floor(angle / 45)
             if lastvalue != value and length > 2:
-                cv2.circle(self.sourceImage,(nx,ny),1,(255,0,0),3)
+                cv2.circle(self.sourceImage,(nx,ny),1,(255,0,0),10)
                 
                 lastvalue = value
                 chaincode.append(lastvalue)

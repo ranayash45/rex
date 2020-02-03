@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rex.settings import MEDIA_URL
 from tools.models import Upload
 from .Learning.ImageClassification import IdentifyMango
+from .Learning.DeepClassifier import PredictImage
 import cv2
 import numpy as np
 
@@ -21,8 +22,10 @@ def ClassificationUploadMethod(request):
             #print(myfile)
             filedata = myfile.read()
             img_np = cv2.imdecode(np.asarray(bytearray(filedata),dtype=np.uint8),-1)
+            predict = PredictImage(img_np)
             #img_np = cv2.imread(MEDIA_URL +'/'+filename)
             Result = IdentifyMango(img_np)
+            Result['cnnpredict'] = predict
             image_string = cv2.imencode('.jpg',Result['img'])
             upload = Upload()
             upload.file.save(myfile.name,ContentFile(image_string[1]))

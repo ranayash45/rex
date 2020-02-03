@@ -13,3 +13,4 @@ whitenoise
 django-storages
 boto
 boto3
+keras

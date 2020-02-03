@@ -56,6 +56,23 @@
                     <td>{{ pesl.0 }}</td>
                 </Tr>
             </table>
+        </div>
+            <div class="col-lg-12 col-md-12 col-xs-12">
+            <h4>CNN Based Classification</h4>
+            <table class="table table-condensed">
+                {% for key,value in cnnpredict.items %}
+                <Tr>
+                    <Th width="200">{{ key }} - {{ value }} %</Th>
+
+                    <Td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{value}}%;" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100">{{ value }}%</div>
+                        </div>
+                    </Td>
+                </Tr>
+                {% endfor %}
+
+            </table>
            <h4>Breed Type</h4>
              <table class="table table-condensed">
                 <tr>
