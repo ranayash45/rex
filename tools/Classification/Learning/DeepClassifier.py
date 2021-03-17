@@ -23,7 +23,7 @@ def PredictImage(Image,ClassifierName='Mango_Mix_Classifier_model'):
     temp.write(data)
     temp.close()
 
-    model = models.load_model(temp.name)
+    model = models.load_model(str(temp.name))
     model.compile(loss='sparse_categorical_crossentropy',
                   optimizer=optimizers.RMSprop(lr=1e-4),
                   metrics=['acc'])

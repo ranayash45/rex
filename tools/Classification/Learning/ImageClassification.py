@@ -1,12 +1,8 @@
 import cv2
-import os
 from .boundarydetector import ShapeDetector
-from sklearn.tree.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
-import mahotas
 from mahotas.features import haralick
-import numpy
-from django.contrib.staticfiles.storage import staticfiles_storage
 import boto3
 from rex.settings import AWS_SECRET_ACCESS_KEY,AWS_STORAGE_BUCKET_NAME,AWS_ACCESS_KEY_ID
 import io

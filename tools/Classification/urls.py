@@ -1,7 +1,9 @@
 from django.urls import path,include
-import tools.Classification.views
+from . import views
 urlpatterns = [
-    path('Mango/',tools.Classification.views.Classification),
-    path('Mango/Upload',tools.Classification.views.ClassificationUploadMethod),
-    path('ListClassifier/',tools.Classification.views.ListClassifiers)
+    path('',views.Index),
+    path('Mango/',views.Classification),
+    path('Mango/Upload',views.ClassificationUploadMethod),
+    path('Mango/Upload2',views.ClassificationUploadJquery),
+    path('ListClassifier/',views.ListClassifiers)
 ]

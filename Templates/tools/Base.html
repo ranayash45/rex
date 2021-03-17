@@ -5,12 +5,11 @@
     <title>Classification</title>
     {% load static %}
     <link href="{% static 'CSS/bootstrap.css' %}" rel="stylesheet">
-    <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
   <header>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Classifier</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -22,7 +21,17 @@
           <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">List of classifiers</a>
+          <a class="nav-link" href="#">List of Tools</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tools</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="/tools/Classification/">Classification</a>
+            <a class="dropdown-item" href="#">DateTime</a>
+            <a class="dropdown-item" href="#">Canvas</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Comming Soon</a>
+          </div>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">About us</a>
@@ -44,7 +53,8 @@
   <footer style="padding-top:20px; padding-left:20px;">
     <h6>Copyright by &copy; YASH RANA 2019</h6>
   </footer>
-   <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery-3.6.0.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
 </body>
 </html>

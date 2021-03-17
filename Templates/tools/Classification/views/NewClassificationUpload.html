@@ -1,0 +1,201 @@
+{% extends "tools/Classification/views/Base.html" %}
+{% block content %}
+<div class="bg-light">
+<h2>Available Classifiers</h2>
+<div class="container-fluid" style="padding:0px 50px;">
+
+    <div class="row">
+        <h2>Mango Upload Method 2</h2>
+    </div>
+    <div class="row" style="margin-bottom:10px;">
+        <div class="col-lg-3">
+            <img alt="Image For Classification" class="img-responsive img-thumbnail" id="original_img" style="min-height:300px; min-width:300px" />
+        </div>
+        <div class="col-lg-9" style="padding-left:25px;">
+            <div class="table-responsive container">
+                <table class="table table-striped table-dark table-hovered">
+                    <thead>
+                    <tr>
+                        <td colspan="4">Score of different Learning Models</td>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td></td>
+                        <td>SVM</td>
+                        <td>Decision Tree</td>
+                        <td>Perceptron</td>
+                    </tr>
+                    <tr>
+                        <td>Breed Type?</td>
+                        <td id="breed_svm"></td>
+                        <td id="breed_dtree"></td>
+                        <td id="breed_perc"></td>
+                    </tr>
+                    <tr>
+                        <td>Ripe or Not?</td>
+                        <td id="ripe_svm"></td>
+                        <td id="ripe_dtree"></td>
+                        <td id="ripe_perc"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">Prediction of Mango Type</td>
+                    </tr>
+                    <tr>
+                        <td>Aafush</td>
+                        <td colspan="3">
+                            <div class="progress">
+                              <div class="progress-bar bg-success" id="prgaafush" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Dasheri</td>
+                        <td colspan="3">
+                            <div class="progress">
+                              <div class="progress-bar bg-success" id="prgdasheri" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Jamadar</td>
+                        <td colspan="3">
+                            <div class="progress">
+                              <div class="progress-bar bg-success" id="prgjamadar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Kesar</td>
+                        <td colspan="3">
+                            <div class="progress">
+                              <div class="progress-bar bg-success" id="prgkesar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>Langdo</td>
+                        <td colspan="3">
+                            <div class="progress">
+                              <div class="progress-bar bg-success" id="prglangdo" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Rajapuri</td>
+                        <td colspan="3">
+                            <div class="progress">
+                              <div class="progress-bar bg-success" id="prgrajapuri" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Totapuri</td>
+                        <td colspan="3">
+                            <div class="progress">
+                              <div class="progress-bar bg-success" id="prgtotapuri" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% csrf_token %}
+        {% load static %}
+        <input type="file" name="fileimg" id="fileimg" style="display:none" />
+        <input type="hidden" id="loaderUrl" value="{% static 'Images/loader.gif' %}" />
+        <button id="btnupload" class="btn btn-primary">Upload</button>
+        <button id="btnloadimage">Load Image</button>
+    </div>
+        <script>
+        $(function(){
+            var loaderUrl = $("#loaderUrl").val();
+
+            $("#btnupload").click(function(){
+                $("#original_img").attr("src",loaderUrl);
+                $("#fileimg").trigger("click");
+            });
+            $("#btnloadimage").click(function(){
+                $("#original_img").attr("src",loaderUrl);
+
+            });
+            $("#fileimg").change(function(){
+                var newValue = this.value;
+                if(newValue != ""){
+                    var formData = new FormData();
+                    var csrftoken = $('[name=csrfmiddlewaretoken]').val() ;
+                    formData.append('classificationupload',$(this)[0].files[0]);
+                    formData.append('csrfmiddlewaretoken',csrftoken);
+
+                    $.ajax({
+                        url: '/tools/Classification/Mango/Upload2',
+                        type: 'POST',
+                        data: formData,
+                        async: false,
+                        cache: false,
+                        contentType: false,
+                        mimeType: 'multipart/form-data',
+                        processData: false,
+                        beforeSend: function(){
+                            $("#original_img").attr("src",loaderUrl);
+
+                            $("#prgaafush").width("55%");
+                        },
+                        success: function(data){
+                            console.log(data);
+                            data = JSON.parse(data);
+                            var image_url = data["image_url"];
+                            $("#original_img").attr("src",image_url);
+                            $("#breed_svm").html(Number(data["breed_type"]["svm"]).toPrecision(2));
+                            $("#breed_dtree").html(Number(data["breed_type"]["dtree"]).toPrecision(2));
+                            $("#breed_perc").html(Number(data["breed_type"]["perc"]).toPrecision(2));
+
+                            $("#ripe_svm").html(Number(data["condition"]["svm"]).toPrecision(2));
+                            $("#ripe_dtree").html(Number(data["condition"]["dtree"]).toPrecision(2));
+                            $("#ripe_perc").html(Number(data["condition"]["perc"]).toPrecision(2));
+                            var predictions = data["predictions"]
+                            $("#prgaafush").width(predictions["Aafush"]+"%");
+                            $("#prgaafush").html(predictions["Aafush"]+" %");
+
+                            $("#prgdasheri").width(predictions["Dasheri"]+"%");
+                            $("#prgdasheri").html(predictions["Dasheri"]+" %");
+
+                            $("#prgjamadar").width(predictions["Jamadar"]+"%");
+                            $("#prgjamadar").html(predictions["Jamadar"]+" %");
+
+                            $("#prgkesar").width(predictions["Kesar"]+"%");
+                            $("#prgkesar").html(predictions["Kesar"]+" %");
+
+                            $("#prglangdo").width(predictions["Langdo"]+"%");
+                            $("#prglangdo").html(predictions["Langdo"]+" %");
+
+                            $("#prgrajapuri").width(predictions["Rajapuri"]+"%");
+                            $("#prgrajapuri").html(predictions["Rajapuri"]+" %");
+
+
+                            $("#prgtotapuri").width(predictions["Totapuri"]+"%");
+                            $("#prgtotapuri").html(predictions["Totapuri"]+" %");
+
+
+                        }
+                    });
+                }else{
+
+                    $("#original_img").attr("src","");
+                }
+            });
+        });
+    </script>
+</div>
+</div>
+{% endblock %}
