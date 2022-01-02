@@ -1,4 +1,7 @@
+import os.path
+
 import cv2
+import os.path
 from .boundarydetector import ShapeDetector
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
@@ -61,8 +64,13 @@ def IdentifyMango(imgnp):
                       aws_access_key_id=AWS_ACCESS_KEY_ID,
                       aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
     key = 'static/QualityFeatures.csv'
-    obj = s3.get_object(Bucket=AWS_STORAGE_BUCKET_NAME,Key=key)
-    dataframe = pandas.read_csv(io.BytesIO(obj['Body'].read()),encoding='utf-8')
+    if not os.path.exists(key):
+        obj = s3.get_object(Bucket=AWS_STORAGE_BUCKET_NAME,Key=key)
+        fp = open(key,'wb')
+        fp.write(obj['Body'].read())
+        fp.close()
+
+    dataframe = pandas.read_csv(key)
     dataframe = dataframe.sort_values(by='Partially Ripe')
     ripe = dataframe.loc[dataframe['Partially Ripe'] == 'Ripe']
     unripe = dataframe.loc[dataframe['Partially Ripe'] == 'Unripe']
@@ -202,17 +210,19 @@ def IdentifyMango(imgnp):
 
 
     key = 'static/QualityFeaturesMango.csv'
-    obj = s3.get_object(Bucket=AWS_STORAGE_BUCKET_NAME,Key=key)
-    dataframe = pandas.read_csv(io.BytesIO(obj['Body'].read()),encoding='utf-8')
+    if not os.path.exists(key):
 
-
-    data = dataframe.values
-
-    Y = data[:, 0]
-    X = data[:, 2:]
+        obj = s3.get_object(Bucket=AWS_STORAGE_BUCKET_NAME,Key=key)
+        fp = open(key,
+                  'wb')
+        fp.write(obj['Body'].read())
+        fp.close()
+    dataframe = pandas.read_csv(key)
+    Y = dataframe.iloc[:,0].values
+    X = dataframe.iloc[:,2:].values
     from sklearn.preprocessing import LabelEncoder
     labelencoder = LabelEncoder()
-    Y = labelencoder.fit_transform(Y)
+    Y = labelencoder.fit_transform(Y.reshape(-1,1))
 
     # Y[Y!=0] = 1
     # print(Y)
