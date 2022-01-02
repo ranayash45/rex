@@ -69,7 +69,7 @@ def IdentifyMango(imgnp):
         fp = open(key,'wb')
         fp.write(obj['Body'].read())
         fp.close()
-
+        del fp
     dataframe = pandas.read_csv(key)
     dataframe = dataframe.sort_values(by='Partially Ripe')
     ripe = dataframe.loc[dataframe['Partially Ripe'] == 'Ripe']
@@ -217,6 +217,8 @@ def IdentifyMango(imgnp):
                   'wb')
         fp.write(obj['Body'].read())
         fp.close()
+        del fp
+
     dataframe = pandas.read_csv(key)
     Y = dataframe.iloc[:,0].values
     X = dataframe.iloc[:,2:].values

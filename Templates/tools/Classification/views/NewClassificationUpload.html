@@ -115,7 +115,6 @@
         <input type="file" name="fileimg" id="fileimg" style="display:none" />
         <input type="hidden" id="loaderUrl" value="{% static 'Images/loader.gif' %}" />
         <button id="btnupload" class="btn btn-primary">Upload</button>
-        <button id="btnloadimage">Load Image</button>
     </div>
         <script>
         $(function(){
@@ -124,10 +123,6 @@
             $("#btnupload").click(function(){
                 $("#original_img").attr("src",loaderUrl);
                 $("#fileimg").trigger("click");
-            });
-            $("#btnloadimage").click(function(){
-                $("#original_img").attr("src",loaderUrl);
-
             });
             $("#fileimg").change(function(){
                 var newValue = this.value;
@@ -150,6 +145,11 @@
                             $("#original_img").attr("src",loaderUrl);
 
                             $("#prgaafush").width("55%");
+                        },
+                        error:function(error){
+                            $("#original_img").attr("src","");
+                            $("#original_img").attr("alt","500 Server Error");
+
                         },
                         success: function(data){
                             console.log(data);

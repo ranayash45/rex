@@ -7,8 +7,7 @@ from .Learning.ImageClassification import IdentifyMango
 from .Learning.DeepClassifier import PredictImage
 import cv2
 import numpy as np
-from os import path
-
+import time
 
 # Create your views here.
 
@@ -64,6 +63,7 @@ def ClassificationUploadJquery(request):
 
 def ClassificationUploadMethod(request):
     if request.method == 'POST' and request.FILES['classificationupload']:
+        starttime = time.process_time()
         myfile = request.FILES['classificationupload']
         if myfile.name.lower().endswith('.jpeg') or myfile.name.lower().endswith('.jpg'):
             #print(myfile)
@@ -78,6 +78,8 @@ def ClassificationUploadMethod(request):
             upload.file.save(myfile.name,ContentFile(image_string[1]))
             upload.save()
             Result['uploaded_file_url'] = MEDIA_URL + upload.file.name
+            elapsedtime = time.process_time() - starttime
+            Result['elapsedtime'] = elapsedtime
             return render(request, 'tools/Classification/views/ClassificationUpload.html',Result)
         else:
             return render(request, 'tools/Classification/views/ClassificationUpload.html', {

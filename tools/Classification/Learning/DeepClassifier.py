@@ -1,10 +1,10 @@
 from keras import models
 from keras import optimizers
+from keras import backend as K
 from keras.preprocessing import image
 import numpy as np
 import cv2
 import boto3
-import tempfile
 from rex.settings import AWS_STORAGE_BUCKET_NAME, AWS_SECRET_ACCESS_KEY, AWS_ACCESS_KEY_ID
 import os.path
 
@@ -12,6 +12,7 @@ Labels = {'Aafush': 0, 'Dasheri': 0, 'Jamadar': 0, 'Kesar': 0, 'Langdo': 0, 'Raj
 
 
 def PredictImage(Image, ClassifierName='Mango_Mix_Classifier_model'):
+    K.clear_session()
     key = 'static/' + ClassifierName + '.h5'
     if not os.path.exists(key):
         s3 = boto3.client('s3',
@@ -23,6 +24,7 @@ def PredictImage(Image, ClassifierName='Mango_Mix_Classifier_model'):
         modelfile = open(key, 'wb')
         modelfile.write(data)
         modelfile.close()
+        del modelfile
 
     model = models.load_model(key)
     model.compile(loss='sparse_categorical_crossentropy',
